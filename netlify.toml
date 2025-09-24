@@ -1,14 +1,21 @@
 [build]
   command = "npm install"
   functions = "netlify/functions"
+  publish = "build"
 
 [build.environment]
   NODE_VERSION = "18"
+
+[functions]
+  external_node_modules = ["express", "@optimizely-opal/opal-tools-sdk"]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
 
 [[redirects]]
   from = "/*"
   to = "/.netlify/functions/index"
   status = 200
-
-[functions]
-  node_bundler = "esbuild"
