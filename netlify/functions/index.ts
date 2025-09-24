@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express'
 import { ToolsService, tool } from '@optimizely-opal/opal-tools-sdk'
+import serverless from 'serverless-http'
 
 const app = express()
 app.use(express.json())
@@ -15,16 +16,12 @@ class BonusPointCalculator {
   }
 }
 
-const toolsService = new ToolsService(app)
+// Register Opal tools with Express
+new ToolsService(app)
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
   res.json({ status: 'ok', message: 'Bonus Point Calculator is running' })
 })
 
-const PORT = process.env.PORT || 3000
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-  console.log(`Discovery endpoint: http://localhost:${PORT}/discovery`)
-  console.log(`Health check: http://localhost:${PORT}/health`)
-})
+export const handler = serverless(app)
