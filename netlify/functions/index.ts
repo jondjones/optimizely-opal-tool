@@ -9,10 +9,10 @@ app.use(express.json());
 app.use(cors());
 app.use('/public', express.static('public'));
 
-// Wrap the Express app with serverless-http for Netlify Functions
+
 const handler: Handler = serverless(app);
 export { handler };
-// Create Tools Service
+
 const toolsService = new ToolsService(app);
 
 async function bonuslyPointCalculator() {
@@ -30,7 +30,7 @@ tool({
 // Export the Express app for serverless environments
 export { app };
 
-// Start the server only when running locally (not in serverless environments)
+
 if (process.env.NODE_ENV !== 'production' || process.env.NETLIFY !== 'true') {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
