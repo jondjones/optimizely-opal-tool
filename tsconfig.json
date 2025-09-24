@@ -6,8 +6,10 @@
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
       "strict": true,
-      "outDir": "dist"
+      "outDir": "dist",
+      "rootDir": "."
     },
     "include": ["netlify/functions/**/*.ts"],
     "exclude": ["node_modules", "dist"]
   }
+  

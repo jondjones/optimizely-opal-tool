@@ -13,10 +13,8 @@ exports.app = app;
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 app.use('/public', express_1.default.static('public'));
-// Wrap the Express app with serverless-http for Netlify Functions
 const handler = serverless(app);
 exports.handler = handler;
-// Create Tools Service
 const toolsService = new opal_tools_sdk_1.ToolsService(app);
 async function bonuslyPointCalculator() {
     return {
@@ -28,7 +26,6 @@ async function bonuslyPointCalculator() {
     description: 'Returns a string',
     parameters: []
 })(bonuslyPointCalculator);
-// Start the server only when running locally (not in serverless environments)
 if (process.env.NODE_ENV !== 'production' || process.env.NETLIFY !== 'true') {
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
