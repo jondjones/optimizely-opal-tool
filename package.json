@@ -1,0 +1,20 @@
+{
+  "name": "bonuly-point-calculator",
+  "version": "1.0.0",
+  "description": "A simple Opal tool that returns the name Jon",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "keywords": ["opal", "tool", "optimizely"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@optimizely-opal/opal-tools-sdk": "^1.0.0",
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
