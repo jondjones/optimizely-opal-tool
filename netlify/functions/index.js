@@ -1,24 +1,33 @@
 const express = require('express');
-const { ToolsService, tool } = require('@optimizely-opal/opal-tools-sdk');
+const { OpalTool, ParameterType } = require('@optimizely-opal/opal-tools-sdk');
+
+class BonulyPointCalculator extends OpalTool {
+  constructor() {
+    super({
+      name: 'Bonuly Point Calculator',
+      description: 'A simple tool that returns the name "Jon".',
+      version: '1.0.0',
+      basePath: '/bonuly-point-calculator',
+    });
+    
+    // Register the tool function
+    this.registerTool({
+      name: 'getName',
+      description: 'Returns the name "Jon".',
+      parameters: [],
+      handler: this.getName.bind(this)
+    });
+  }
+
+  async getName() {
+    return { name: 'Jon' };
+  }
+}
 
 const app = express();
-const toolsService = new ToolsService(app);
+const toolInstance = new BonulyPointCalculator();
 
-// Middleware to parse JSON requests
-app.use(express.json());
-
-@tool({
-  name: 'bonuly_point_calculator',
-  description: 'Returns the name Jon',
-  parameters: {
-    type: 'object',
-    properties: {},
-    required: []
-  }
-})
-async function bonulyPointCalculator() {
-  return { name: 'Jon' };
-}
+app.use(toolInstance.router);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
