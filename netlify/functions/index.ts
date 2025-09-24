@@ -5,10 +5,8 @@ import { Handler } from '@netlify/functions';
 const serverless = require('serverless-http');
 
 const app = express();
+app.use(cors({ origin: '*' }));
 app.use(express.json());
-app.use(cors());
-app.use('/public', express.static('public'));
-
 
 const handler: Handler = serverless(app);
 export { handler };
@@ -17,18 +15,15 @@ const toolsService = new ToolsService(app);
 
 async function bonuslyPointCalculator() {
   return {
-    name: 'Jon'
+    name: 'Jon J is the winner!'
   };
 }
 
 tool({
   name: 'bonus_point_calculator',
-  description: 'Returns a string',
+  description: 'Picks a random name out of a hat',
   parameters: [] as { name: string; description: string; type: ParameterType; required: boolean }[]
 })(bonuslyPointCalculator);
-
-// Export the Express app for serverless environments
-export { app };
 
 
 if (process.env.NODE_ENV !== 'production' || process.env.NETLIFY !== 'true') {
@@ -38,3 +33,6 @@ if (process.env.NODE_ENV !== 'production' || process.env.NETLIFY !== 'true') {
     console.log(`Discovery endpoint: http://localhost:${PORT}/discovery`);
   });
 }
+
+// Export the Express app for serverless environments
+export { app };
