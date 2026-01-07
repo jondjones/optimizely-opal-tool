@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<!-- saved from url=(0144)https://opal-backend.optimizely.com/v1/file/Z3M6Ly9vcGFsLWJhY2tlbmQtcHJvZC1maWxlLWNvbnRlbnRzL2M1OWJmNjI4LWNhYTQtNDUyZS04OTJhLTJmZTU4ODQzYmNmYw== -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{clientName}} - GEO Validation Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-main: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-tertiary: #94a3b8;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar / Table of Contents */
+        .sidebar {
+            background: var(--bg-main);
+            border-right: 1px solid var(--border);
+            padding: 2rem 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-header h2 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-tertiary);
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 0.25rem;
+        }
+
+        .toc-link {
+            display: block;
+            padding: 0.625rem 1.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .toc-link:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-left-color: var(--primary);
+        }
+
+        .toc-link.active {
+            background: var(--bg-secondary);
+            color: var(--primary);
+            border-left-color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .report-header {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%),
+                        url('https://images4.cmp.optimizely.com/Zz05ODhkOTFlZWQxMjcxMWYwODNiM2FhNTExMGM0M2YxYg==');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: multiply;
+            color: white;
+            padding: 3rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .report-header:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.7) 0%, rgba(118, 75, 162, 0.7) 100%);
+            z-index: 1;
+        }
+
+        .report-header > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-content {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .report-url {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-label {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .meta-value {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* Header Score Card */
+        .header-score-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .header-score-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .header-gauge-container {
+            position: relative;
+            width: 150px;
+            height: 90px;
+            margin: 0 auto 1rem;
+        }
+
+        .header-gauge-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .header-gauge-value {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .header-gauge-description {
+            font-size: 1rem;
+            font-weight: 600;
+            opacity: 0.95;
+        }
+
+        /* Executive Summary */
+        .exec-summary {
+            background: var(--bg-main);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .score-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .score-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .gauge-container {
+            position: relative;
+            width: 100%;
+            height: 120px;
+            margin-bottom: 1rem;
+        }
+
+        .gauge-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .gauge-value {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .gauge-description {
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* Priority Lists */
+        .priority-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .priority-box {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--danger);
+        }
+
+        .priority-box.quick-wins {
+            border-left-color: var(--success);
+        }
+
+        .priority-box h3 {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .priority-list {
+            list-style: none;
+        }
+
+        .priority-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+        }
+
+        .priority-list li:last-child {
+            border-bottom: none;
+        }
+
+        .priority-list li strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Content Sections */
+        .content-section {
+            background: var(--bg-main);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .subsection {
+            margin-top: 2rem;
+        }
+
+        .subsection-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .status-badge.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-badge.warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-badge.danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-icon {
+            font-size: 1.25rem;
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .metric-card {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: var(--bg-main);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .data-table thead {
+            background: var(--bg-tertiary);
+        }
+
+        .data-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .priority-high {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .priority-medium {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        .priority-low {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* Code Blocks */
+        .code-block-container {
+            position: relative;
+            margin: 1.5rem 0;
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1e293b;
+            padding: 0.75rem 1rem;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .code-block-title {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .copy-button {
+            background: #334155;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copy-button:hover {
+            background: #475569;
+        }
+
+        .copy-button.copied {
+            background: var(--success);
+        }
+
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 0 0 8px 8px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .code-block code {
+            font-family: inherit;
+        }
+
+        /* Lists */
+        .content-list {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .content-list li {
+            padding: 0.75rem 0 0.75rem 2rem;
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        .content-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Collapsible Sections */
+        .collapsible-section {
+            margin: 1.5rem 0;
+        }
+
+        .collapsible-header {
+            background: var(--bg-secondary);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+            border: 1px solid var(--border);
+        }
+
+        .collapsible-header:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .collapsible-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .collapsible-icon {
+            font-size: 1.25rem;
+            color: var(--text-tertiary);
+            transition: transform 0.3s;
+        }
+
+        .collapsible-section.active .collapsible-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .collapsible-section.active .collapsible-content {
+            max-height: 5000px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .collapsible-inner {
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            background: var(--bg-main);
+        }
+
+        /* Action Items */
+        .action-item {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .action-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .action-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .impact-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .impact-high {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .impact-medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .action-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .detail-item {
+            font-size: 0.875rem;
+        }
+
+        .detail-label {
+            color: var(--text-tertiary);
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-value {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -2.375rem;
+            top: 0.25rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid var(--bg-main);
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .score-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .header-score-card {
+                width: 100%;
+            }
+        }
+
+        @media print {
+            .sidebar {
+                display: none;
+            }
+
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .copy-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body cz-shortcut-listen="true" data-new-gr-c-s-check-loaded="14.1265.0" data-gr-ext-installed="">
+    <div class="container">
+        <!-- Sidebar / Table of Contents -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Contents</h2>
+            </div>
+            <nav>
+                <ul class="toc-list">
+                    <li class="toc-item"><a href="https://opal-backend.optimizely.com/v1/file/Z3M6Ly9vcGFsLWJhY2tlbmQtcHJvZC1maWxlLWNvbnRlbnRzL2M1OWJmNjI4LWNhYTQtNDUyZS04OTJhLTJmZTU4ODQzYmNmYw==#executive-summary" class="toc-link">Executive Summary</a></li>
+                    <li class="toc-item"><a href="https://opal-backend.optimizely.com/v1/file/Z3M6Ly9vcGFsLWJhY2tlbmQtcHJvZC1maWxlLWNvbnRlbnRzL2M1OWJmNjI4LWNhYTQtNDUyZS04OTJhLTJmZTU4ODQzYmNmYw==#technical-foundation" class="toc-link">Technical Foundation</a></li>
+                    <li class="toc-item"><a href="https://opal-backend.optimizely.com/v1/file/Z3M6Ly9vcGFsLWJhY2tlbmQtcHJvZC1maWxlLWNvbnRlbnRzL2M1OWJmNjI4LWNhYTQtNDUyZS04OTJhLTJmZTU4ODQzYmNmYw==#schema-markup" class="toc-link">Schema Markup</a></li>
+                    <li class="toc-item"><a href="https://opal-backend.optimizely.com/v1/file/Z3M6Ly9vcGFsLWJhY2tlbmQtcHJvZC1maWxlLWNvbnRlbnRzL2M1OWJmNjI4LWNhYTQtNDUyZS04OTJhLTJmZTU4ODQzYmNmYw==#content-structure" class="toc-link">Content Structure</a></li>
+                    <li class="toc-item"><a href="https://opal-backend.optimizely.com/v1/file/Z3M6Ly9vcGFsLWJhY2tlbmQtcHJvZC1maWxlLWNvbnRlbnRzL2M1OWJmNjI4LWNhYTQtNDUyZS04OTJhLTJmZTU4ODQzYmNmYw==#eeat-evaluation" class="toc-link">E-E-A-T Evaluation</a></li>
+                    <li class="toc-item"><a href="https://opal-backend.optimizely.com/v1/file/Z3M6Ly9vcGFsLWJhY2tlbmQtcHJvZC1maWxlLWNvbnRlbnRzL2M1OWJmNjI4LWNhYTQtNDUyZS04OTJhLTJmZTU4ODQzYmNmYw==#citation-readiness" class="toc-link">Citation Readiness</a></li>
+                    <li class="toc-item"><a href="https://opal-backend.optimizely.com/v1/file/Z3M6Ly9vcGFsLWJhY2tlbmQtcHJvZC1maWxlLWNvbnRlbnRzL2M1OWJmNjI4LWNhYTQtNDUyZS04OTJhLTJmZTU4ODQzYmNmYw==#competitive-positioning" class="toc-link">Competitive Positioning</a></li>
+                    <li class="toc-item"><a href="https://opal-backend.optimizely.com/v1/file/Z3M6Ly9vcGFsLWJhY2tlbmQtcHJvZC1maWxlLWNvbnRlbnRzL2M1OWJmNjI4LWNhYTQtNDUyZS04OTJhLTJmZTU4ODQzYmNmYw==#action-plan" class="toc-link">Action Plan</a></li>
+                    <li class="toc-item"><a href="https://opal-backend.optimizely.com/v1/file/Z3M6Ly9vcGFsLWJhY2tlbmQtcHJvZC1maWxlLWNvbnRlbnRzL2M1OWJmNjI4LWNhYTQtNDUyZS04OTJhLTJmZTU4ODQzYmNmYw==#monitoring" class="toc-link">Monitoring</a></li>
+                    <li class="toc-item"><a href="https://opal-backend.optimizely.com/v1/file/Z3M6Ly9vcGFsLWJhY2tlbmQtcHJvZC1maWxlLWNvbnRlbnRzL2M1OWJmNjI4LWNhYTQtNDUyZS04OTJhLTJmZTU4ODQzYmNmYw==#technical-implementation" class="toc-link">Technical Implementation</a></li>
+                    <li class="toc-item"><a href="https://opal-backend.optimizely.com/v1/file/Z3M6Ly9vcGFsLWJhY2tlbmQtcHJvZC1maWxlLWNvbnRlbnRzL2M1OWJmNjI4LWNhYTQtNDUyZS04OTJhLTJmZTU4ODQzYmNmYw==#risk-assessment" class="toc-link">Risk Assessment</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <!-- Report Header -->
+                <header class="report-header">
+                    <div class="header-content">
+                        <div class="header-left">
+                            <h1>GEO Validation Report</h1>
+                            <div class="report-url">{{websiteUrl}}</div>
+                            <div class="report-meta">
+                                <div class="meta-item">
+                                    <span class="meta-label">Client</span>
+                                    <span class="meta-value">{{clientName}}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Report Date</span>
+                                    <span class="meta-value">{{reportDate}}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Analyst</span>
+                                    <span class="meta-value">{{analystName}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="header-score-card">
+                            <div class="header-score-label">Overall GEO Score</div>
+                            <div class="header-gauge-container">
+                                <svg class="header-gauge-svg" viewBox="0 0 200 120">
+                                    <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="rgba(255, 255, 255, 0.3)" stroke-width="20" stroke-linecap="round"></path>
+                                    <path class="gauge-fill header-gauge-fill" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="white" stroke-width="20" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="{{overallScoreOffset}}" style="transition: stroke-dashoffset 1s ease-out;"></path>
+                                </svg>
+                                <div class="header-gauge-value">{{overallScore}}</div>
+                            </div>
+                            <div class="header-gauge-description">{{overallScoreLabel}}</div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Executive Summary -->
+                <section id="executive-summary" class="exec-summary">
+                    <h2 class="section-title">📊 Executive Summary</h2>
+                    
+                    <div class="score-grid">
+                        <div class="score-card">
+                            <div class="score-label">AI Citation Readiness</div>
+                            <div class="gauge-container">
+                                <svg class="gauge-svg" viewBox="0 0 200 120">
+                                    <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#e2e8f0" stroke-width="20" stroke-linecap="round"></path>
+                                    <path class="gauge-fill" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="{{citationScoreColor}}" stroke-width="20" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="{{citationScoreOffset}}" style="transition: stroke-dashoffset 1s ease-out;"></path>
+                                </svg>
+                                <div class="gauge-value" style="color: {{citationScoreColor}}">{{citationScore}}</div>
+                            </div>
+                            <div class="gauge-description">{{citationScoreLabel}}</div>
+                        </div>
+
+                        <div class="score-card">
+                            <div class="score-label">Technical Foundation</div>
+                            <div class="gauge-container">
+                                <svg class="gauge-svg" viewBox="0 0 200 120">
+                                    <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#e2e8f0" stroke-width="20" stroke-linecap="round"></path>
+                                    <path class="gauge-fill" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="{{technicalScoreColor}}" stroke-width="20" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="{{technicalScoreOffset}}" style="transition: stroke-dashoffset 1s ease-out;"></path>
+                                </svg>
+                                <div class="gauge-value" style="color: {{technicalScoreColor}}">{{technicalScore}}</div>
+                            </div>
+                            <div class="gauge-description">{{technicalScoreLabel}}</div>
+                        </div>
+
+                        <div class="score-card">
+                            <div class="score-label">E-E-A-T Signals</div>
+                            <div class="gauge-container">
+                                <svg class="gauge-svg" viewBox="0 0 200 120">
+                                    <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#e2e8f0" stroke-width="20" stroke-linecap="round"></path>
+                                    <path class="gauge-fill" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="{{eeatScoreColor}}" stroke-width="20" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="{{eeatScoreOffset}}" style="transition: stroke-dashoffset 1s ease-out;"></path>
+                                </svg>
+                                <div class="gauge-value" style="color: {{eeatScoreColor}}">{{eeatScore}}</div>
+                            </div>
+                            <div class="gauge-description">{{eeatScoreLabel}}</div>
+                        </div>
+                    </div>
+
+                    <div class="priority-section">
+                        <div class="priority-box">
+                            <h3>🚨 Priority Issues</h3>
+                            <ol class="priority-list">
+                                {{#priorityIssues}}
+                                <li><strong>{{title}}:</strong> {{description}}</li>
+                                {{/priorityIssues}}
+                            </ol>
+                        </div>
+
+                        <div class="priority-box quick-wins">
+                            <h3>⚡ Quick Wins</h3>
+                            <ol class="priority-list">
+                                {{#quickWins}}
+                                <li><strong>{{title}}:</strong> {{description}}</li>
+                                {{/quickWins}}
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Technical Foundation -->
+                <section id="technical-foundation" class="content-section">
+                    <h2 class="section-title">🔧 Technical Foundation</h2>
+
+                    <div class="subsection">
+                        <div class="status-badge success">
+                            <span class="status-icon">✓</span>
+                            Strengths
+                        </div>
+                        <ul class="content-list">
+                            {{#technicalStrengths}}
+                            <li>{{.}}</li>
+                            {{/technicalStrengths}}
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <div class="status-badge warning">
+                            <span class="status-icon">⚠</span>
+                            Issues Found
+                        </div>
+                        
+                        <div class="collapsible-section">
+                            <div class="collapsible-header">
+                                <span class="collapsible-title">Critical Issues</span>
+                                <span class="collapsible-icon">▼</span>
+                            </div>
+                            <div class="collapsible-content">
+                                <div class="collapsible-inner">
+                                    <ul class="content-list">
+                                        {{#criticalIssues}}
+                                        <li>{{.}}</li>
+                                        {{/criticalIssues}}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="collapsible-section">
+                            <div class="collapsible-header">
+                                <span class="collapsible-title">Important Issues</span>
+                                <span class="collapsible-icon">▼</span>
+                            </div>
+                            <div class="collapsible-content">
+                                <div class="collapsible-inner">
+                                    <ul class="content-list">
+                                        {{#importantIssues}}
+                                        <li>{{.}}</li>
+                                        {{/importantIssues}}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="collapsible-section">
+                            <div class="collapsible-header">
+                                <span class="collapsible-title">Minor Issues</span>
+                                <span class="collapsible-icon">▼</span>
+                            </div>
+                            <div class="collapsible-content">
+                                <div class="collapsible-inner">
+                                    <ul class="content-list">
+                                        {{#minorIssues}}
+                                        <li>{{.}}</li>
+                                        {{/minorIssues}}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Key Metrics</h3>
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <div class="metric-label">Server Response</div>
+                                <div class="metric-value">{{serverResponseTime}}</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">LCP</div>
+                                <div class="metric-value">{{lcpTime}}</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">TBT</div>
+                                <div class="metric-value">{{tbtTime}}</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">CLS</div>
+                                <div class="metric-value">{{clsScore}}</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">Mobile Score</div>
+                                <div class="metric-value">{{mobileScore}}</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">JS Dependency</div>
+                                <div class="metric-value">{{jsDependency}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Schema Markup -->
+                <section id="schema-markup" class="content-section">
+                    <h2 class="section-title">📋 Schema Markup Analysis</h2>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Current Implementation</h3>
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <div class="metric-label">Schema Types Found</div>
+                                <div class="metric-value">{{schemaTypesFound}}</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">Validation Status</div>
+                                <div class="metric-value">{{schemaValidationStatus}}</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">Coverage Score</div>
+                                <div class="metric-value">{{schemaCoverage}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Missing Schemas (Priority Order)</h3>
+                        
+                                {{#missingSchemas}}
+                                
+                                {{/missingSchemas}}
+                            <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Schema Type</th>
+                                    <th>Impact</th>
+                                    <th>Implementation Time</th>
+                                    <th>Priority</th>
+                                </tr>
+                            </thead>
+                            <tbody><tr>
+                                    <td><strong>{{schemaType}}</strong></td>
+                                    <td>{{impact}}</td>
+                                    <td>{{implementationTime}}</td>
+                                    <td class="priority-{{priorityClass}}">{{priority}}</td>
+                                </tr></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Content Structure -->
+                <section id="content-structure" class="content-section">
+                    <h2 class="section-title">📝 Content Structure Assessment</h2>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Optimization Status</h3>
+                        
+                                {{#contentOptimization}}
+                                
+                                {{/contentOptimization}}
+                            <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Element</th>
+                                    <th>Current State</th>
+                                    <th>Target State</th>
+                                    <th>Priority</th>
+                                </tr>
+                            </thead>
+                            <tbody><tr>
+                                    <td><strong>{{element}}</strong></td>
+                                    <td>{{currentState}}</td>
+                                    <td>{{targetState}}</td>
+                                    <td class="priority-{{priorityClass}}">{{priority}}</td>
+                                </tr></tbody>
+                        </table>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Content Gaps</h3>
+                        <ul class="content-list">
+                            {{#contentGaps}}
+                            <li>{{.}}</li>
+                            {{/contentGaps}}
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- E-E-A-T Evaluation -->
+                <section id="eeat-evaluation" class="content-section">
+                    <h2 class="section-title">🎯 E-E-A-T Evaluation</h2>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Current Signals</h3>
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <div class="metric-label">Experience</div>
+                                <div class="metric-value">{{experienceScore}}/10</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">Expertise</div>
+                                <div class="metric-value">{{expertiseScore}}/10</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">Authoritativeness</div>
+                                <div class="metric-value">{{authoritativenessScore}}/10</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">Trustworthiness</div>
+                                <div class="metric-value">{{trustworthinessScore}}/10</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Enhancement Opportunities</h3>
+                        {{#eeatOpportunities}}
+                        <div class="action-item">
+                            <div class="action-header">
+                                <h4 class="action-title">{{title}}</h4>
+                                <span class="impact-badge impact-{{impactClass}}">{{impact}} Impact</span>
+                            </div>
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem;">{{description}}</p>
+                        </div>
+                        {{/eeatOpportunities}}
+                    </div>
+                </section>
+
+                <!-- Citation Readiness -->
+                <section id="citation-readiness" class="content-section">
+                    <h2 class="section-title">🤖 Citation Readiness Score</h2>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Platform-Specific Ratings</h3>
+                        
+                        {{#platformRatings}}
+                        <div class="collapsible-section active">
+                            <div class="collapsible-header">
+                                <span class="collapsible-title">{{platform}} - {{score}}/100</span>
+                                <span class="collapsible-icon">▼</span>
+                            </div>
+                            <div class="collapsible-content">
+                                <div class="collapsible-inner">
+                                    <div style="margin-bottom: 1rem;">
+                                        <strong style="color: var(--success);">Strengths:</strong>
+                                        <ul class="content-list">
+                                            {{#strengths}}
+                                            <li>{{.}}</li>
+                                            {{/strengths}}
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <strong style="color: var(--danger);">Gaps:</strong>
+                                        <ul class="content-list">
+                                            {{#gaps}}
+                                            <li>{{.}}</li>
+                                            {{/gaps}}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/platformRatings}}
+                    </div>
+                </section>
+
+                <!-- Competitive Positioning -->
+                <section id="competitive-positioning" class="content-section">
+                    <h2 class="section-title">📈 Competitive Positioning</h2>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Benchmark Comparison</h3>
+                        <ul class="content-list">
+                            {{#benchmarkComparison}}
+                            <li><strong>{{metric}}:</strong> {{analysis}}</li>
+                            {{/benchmarkComparison}}
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Competitive Advantages to Leverage</h3>
+                        <ul class="content-list">
+                            {{#competitiveAdvantages}}
+                            <li>{{.}}</li>
+                            {{/competitiveAdvantages}}
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Competitive Gaps to Address</h3>
+                        <ul class="content-list">
+                            {{#competitiveGaps}}
+                            <li>{{.}}</li>
+                            {{/competitiveGaps}}
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Action Plan -->
+                <section id="action-plan" class="content-section">
+                    <h2 class="section-title">🎬 Action Plan</h2>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Immediate Actions (0-24 hours)</h3>
+                        {{#immediateActions}}
+                        <div class="action-item">
+                            <div class="action-header">
+                                <h4 class="action-title">{{title}}</h4>
+                                <span class="impact-badge impact-{{impactClass}}">{{impact}} Impact</span>
+                            </div>
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem;">{{implementation}}</p>
+                            <div class="action-details">
+                                <div class="detail-item">
+                                    <div class="detail-label">Resources Required</div>
+                                    <div class="detail-value">{{resources}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/immediateActions}}
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Short-term Improvements (1-7 days)</h3>
+                        {{#shortTermActions}}
+                        <div class="action-item">
+                            <div class="action-header">
+                                <h4 class="action-title">{{title}}</h4>
+                                <span class="impact-badge impact-{{impactClass}}">{{impact}} Impact</span>
+                            </div>
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem;">{{implementation}}</p>
+                            <div class="action-details">
+                                <div class="detail-item">
+                                    <div class="detail-label">Resources Required</div>
+                                    <div class="detail-value">{{resources}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/shortTermActions}}
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Long-term Strategy (7-30 days)</h3>
+                        {{#longTermActions}}
+                        <div class="action-item">
+                            <div class="action-header">
+                                <h4 class="action-title">{{title}}</h4>
+                                <span class="impact-badge impact-{{impactClass}}">{{impact}} Impact</span>
+                            </div>
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem;"><strong>Expected Impact:</strong> {{expectedImpact}}</p>
+                            
+                            <div style="margin-top: 1rem;">
+                                <strong style="color: var(--text-primary);">Implementation Plan:</strong>
+                                <div class="timeline">
+                                    {{#phases}}
+                                    <div class="timeline-item">
+                                        <div class="timeline-title">{{phase}}</div>
+                                        <div class="timeline-content">{{description}}</div>
+                                    </div>
+                                    {{/phases}}
+                                </div>
+                            </div>
+
+                            <div class="action-details">
+                                <div class="detail-item">
+                                    <div class="detail-label">Success Metrics</div>
+                                    <div class="detail-value">{{successMetrics}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/longTermActions}}
+                    </div>
+                </section>
+
+                <!-- Monitoring -->
+                <section id="monitoring" class="content-section">
+                    <h2 class="section-title">📊 Monitoring Recommendations</h2>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Tools to Implement</h3>
+                        <ul class="content-list">
+                            {{#monitoringTools}}
+                            <li>{{.}}</li>
+                            {{/monitoringTools}}
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">KPIs to Track</h3>
+                        <ul class="content-list">
+                            {{#kpisToTrack}}
+                            <li>{{.}}</li>
+                            {{/kpisToTrack}}
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Review Frequency</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9375rem;">{{reviewFrequency}}</p>
+                    </div>
+                </section>
+
+                <!-- Technical Implementation -->
+                <section id="technical-implementation" class="content-section">
+                    <h2 class="section-title">💻 Technical Implementation Code</h2>
+
+                    {{#codeBlocks}}
+                    <div class="subsection">
+                        <h3 class="subsection-title">{{title}}</h3>
+                        <div class="code-block-container">
+                            <div class="code-block-header">
+                                <span class="code-block-title">{{filename}}</span>
+                                <button class="copy-button" onclick="copyCode(this, &#39;{{id}}&#39;)">
+                                    <span>📋</span>
+                                    <span class="button-text">Copy Code</span>
+                                </button>
+                            </div>
+                            <pre class="code-block" id="{{id}}"><code>{{code}}</code></pre>
+                        </div>
+                    </div>
+                    {{/codeBlocks}}
+                </section>
+
+                <!-- Risk Assessment -->
+                <section id="risk-assessment" class="content-section">
+                    <h2 class="section-title">⚠️ Risk Assessment</h2>
+
+                    <div class="metrics-grid" style="margin-bottom: 2rem;">
+                        <div class="metric-card">
+                            <div class="metric-label">Current Risk Level</div>
+                            <div class="metric-value" style="color: {{riskLevelColor}}">{{currentRiskLevel}}</div>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Primary Risks</h3>
+                        {{#primaryRisks}}
+                        <div class="action-item" style="border-left-color: var(--danger);">
+                            <h4 class="action-title">{{title}}</h4>
+                            <p style="color: var(--text-secondary);">{{description}}</p>
+                        </div>
+                        {{/primaryRisks}}
+                    </div>
+
+                    <div class="subsection">
+                        <h3 class="subsection-title">Mitigation Strategy</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9375rem;">{{mitigationStrategy}}</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Smooth scrolling for TOC links
+        document.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    // Update active state
+                    document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Intersection Observer for active TOC links
+        const observerOptions = {
+            root: null,
+            rootMargin: '-20% 0px -70% 0px',
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    document.querySelectorAll('.toc-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('section[id]').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Collapsible sections
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const section = this.parentElement;
+                section.classList.toggle('active');
+            });
+        });
+
+        // Copy code to clipboard
+        function copyCode(button, codeId) {
+            const codeBlock = document.getElementById(codeId);
+            const code = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const buttonText = button.querySelector('.button-text');
+                const originalText = buttonText.textContent;
+                
+                button.classList.add('copied');
+                buttonText.textContent = 'Copied!';
+                
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                    buttonText.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy code:', err);
+                alert('Failed to copy code to clipboard');
+            });
+        }
+
+        // Animate gauges on page load
+        window.addEventListener('load', function() {
+            document.querySelectorAll('.gauge-fill, .header-gauge-fill').forEach(gauge => {
+                const offset = gauge.getAttribute('stroke-dashoffset');
+                gauge.style.strokeDashoffset = '251.2';
+                setTimeout(() => {
+                    gauge.style.strokeDashoffset = offset;
+                }, 100);
+            });
+        });
+    </script>
+
+
+&gt;</body></html>
