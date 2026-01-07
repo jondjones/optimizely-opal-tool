@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "agent_type": "specialized",
+  "name": "Blank Agent",
+  "output": {
+    "type": "text",
+    "schema": {},
+    "description": ""
+  },
+  "version": "1.0.0",
+  "agent_id": "blank_agent",
+  "file_urls": [],
+  "is_active": true,
+  "creativity": 0.5,
+  "is_deleted": false,
+  "parameters": [
+    {
+      "name": "url",
+      "type": "string",
+      "default": null,
+      "required": false,
+      "description": "A website URL variable"
+    }
+  ],
+  "description": "Example Blank Agent",
+  "enabled_tools": [
+    "browse_web"
+  ],
+  "agent_metadata": null,
+  "inference_type": "simple",
+  "prompt_template": "### Role\n\n\\\nYou are a specialised agent. You can access a URL via variable [[url]].  Pass [[url]] into \\``browse_web`\\` and confirm you can see the website.\n\n### \\\nProcess\n\nGenerate a report that:\n\n1. Create a date variable called today_date and add the current date into it\n2. Take the output and replaces the {{url}} with [[url]]\n\n### Output\n\n```\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n</head>\n\n<body>\n  This is a URL {{url}}\n</body>\n</html>\n```",
+  "internal_version": 1,
+  "is_enabled_in_chat": true
+}
