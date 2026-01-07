@@ -15,7 +15,7 @@ const toolsService = new ToolsService(app);
 
 async function bonuslyPointCalculator() {
   return {
-    name: 'Jon J is the winner!'
+    name: 'Opal Example'
   };
 }
 
