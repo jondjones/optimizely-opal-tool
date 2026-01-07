@@ -1,10 +1,10 @@
-# Bonuly Point Calculator
+# Simple Opal Example 
 
-A simple Optimizely Opal tool that returns the name "Jon". This tool is designed to be hosted on Netlify and integrated with Optimizely Opal.
+A simple Optimizely Opal tool that returns the text "Opal Example". This tool is designed to be hosted on Netlify and integrated with Optimizely Opal.
 
 ## Features
 
-- Simple Opal tool that returns `{ name: "Jon" }`
+- Simple Opal tool that returns `{ name: "Opal Example" }`
 - Compatible with Optimizely Opal Tools SDK
 - Ready for Netlify deployment
 - Health check endpoint included
@@ -66,7 +66,7 @@ After deployment:
 - **Tool Name**: `bonuly_point_calculator`
 - **Description**: Returns the name Jon
 - **Parameters**: None required
-- **Response**: `{ "name": "Jon" }`
+- **Response**: `{ "name": "Opal Example" }`
 
 ## Project Structure
 
